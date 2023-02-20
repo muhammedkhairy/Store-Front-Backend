@@ -10,6 +10,9 @@ const credentials = {
   database: process.env.POSTGRES_DB,
 };
 
+/* const databaseClient = new Pool(credentials);
+
+export default databaseClient; */
 const dbConnect = async () => {
   try {
     const client = new Pool(credentials);

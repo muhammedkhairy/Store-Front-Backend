@@ -1,0 +1,17 @@
+{
+  "dev": {
+    "driver": "pg",
+    "host": "${POSTGRES_HOST}",
+    "database": "${POSTGRES_DB}",
+    "user": "${POSTGRES_USER}",
+    "password": "${POSTGRES_PASSWORD}"
+  },
+  "test": {
+    "driver": "pg",
+    "host": "${POSTGRES_HOST_TEST}",
+    "database": "${POSTGRES_DB_TEST}",
+    "user": "${POSTGRES_USER_TEST}",
+    "password": "${POSTGRES_PASSWORD_TEST}"
+  },
+  "sql-file": true
+}
