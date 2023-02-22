@@ -12,6 +12,9 @@
     "watch": "rimraf dist && tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node dist/server.js\"",
     "test": "jasmine",
     "startDev": "rimraf dist && npx tsc && jasmine",
+    "migrate:up": "npx db-migrate up",
+    "migrate:down": "npx db-migrate down",
+    "migrate:downAll": "npx db-migrate reset",
     "eslint": "eslint . --fix",
     "prettier": "prettier . --write",
     "lints": "eslint . --fix && prettier . --write"

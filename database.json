@@ -1,17 +1,18 @@
 {
+  "defaultEnv": { "ENV": "NODE_ENV" },
   "dev": {
     "driver": "pg",
-    "host": "${POSTGRES_HOST}",
-    "database": "${POSTGRES_DB}",
-    "user": "${POSTGRES_USER}",
-    "password": "${POSTGRES_PASSWORD}"
+    "host": { "ENV": "POSTGRES_HOST" },
+    "database": { "ENV": "POSTGRES_DB" },
+    "user": { "ENV": "POSTGRES_USER" },
+    "password": { "ENV": "POSTGRES_PASSWORD" }
   },
   "test": {
     "driver": "pg",
-    "host": "${POSTGRES_HOST_TEST}",
-    "database": "${POSTGRES_DB_TEST}",
-    "user": "${POSTGRES_USER_TEST}",
-    "password": "${POSTGRES_PASSWORD_TEST}"
+    "host": { "ENV": "POSTGRES_HOST_TEST" },
+    "database": { "ENV": "POSTGRES_DB_TEST" },
+    "user": { "ENV": "POSTGRES_USER_TEST" },
+    "password": { "ENV": "POSTGRES_PASSWORD_TEST" }
   },
   "sql-file": true
 }
