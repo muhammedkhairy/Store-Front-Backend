@@ -1,57 +1,119 @@
 # Storefront Backend Project
 
+The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. Our task is building the API that will support this application.
+
 ## Getting Started
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+The following instructions will get you a copy on your machine containing all files and folders you need to start testing the API.
 
-## Required Technologies
+### Prerequisites
 
-Your application must make use of the following libraries:
+- Clone the project to your computer with `git clone` command.
+- Run `yarn` in your terminal at the project root to install all neccessary packages to run the project.
+- Create a .env file in the root directory of the project. containing the following variables:
+  - nodejs server listening port:
+    - NODE_PORT
+  - postgres development database credentials:
+    - POSTGRES_HOST.
+    - POSTGRES_USER.
+    - POSTGRES_PASSWORD.
+    - POSTGRES_PORT.
+    - POSTGRES_DB.
+  - postgres testing database credentials:
+    - POSTGRES_HOST_TEST.
+    - POSTGRES_USER_TEST.
+    - POSTGRES_PASSWORD_TEST.
+    - POSTGRES_PORT_TEST.
+    - POSTGRES_DB_TEST.
+  - db-migrate default environment:
+    - NODE_ENV.
 
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+### Installing
 
-## Steps to Completion
+- Run `yarn` in your terminal at the project root to install all neccessary packages to run the project
+- Make sure that the docker is installed and running in your computer.
+- You may need to be sure that there are no running operations on default port for postgreSQL database by running the command `FOR /F "tokens=5" %P IN ('netstat -a -n -o ^| findstr :5432') DO @ECHO TaskKill.exe /PID %P /F` through command line with administrator privileges
+- start the database by running `docker-compose up -d` through command line.
+- You can choose to start both databases (dev and test) together by running the previous command or to start any of them by running the command `docker-compose up {container_name} -d`.
+- Now the database is set and ready for our project.
 
-### 1. Plan to Meet Requirements
+## Running the scripts
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API.
+### Feeding database with tables (Migration)
 
-Your first task is to read the requirements and update the document with the following:
+- We will use the pacakge `db-migrate` to feed the database with neccessary tables and roll tables back if something goes wrong.
 
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.
-  **Example**: A SHOW route: 'blogs/:id' [GET]
+- to insatll the package we run `yarn global add db-migarate` to use its commands directly through the terimanl.
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.
-  **Example**: You can format this however you like but these types of information should be provided
-  Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+- Then install it locally inside our project folder `yarn add db-migarate` and ofcourse will will add `yarn add db-migarate-pg` as we working with postgreSQL database.
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape.
+- We create our migration files after configuring it through `database.json` file which located in root directory of our project.
 
-### 2. DB Creation and Migrations
+- Here I use the `uuid-ossp` extension to generate a randon unique ids for the tables.
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder.
+> I added the extension as migrate file running before any other migration files
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+- After creating neccessary database by docker it is time to add tables to it, you can run `yarn migrate:up` through command line which will tigger the `npx db-migare up` and creating the following tables:
 
-### 3. Models
+#### Users table
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+```sql
+CREATE TABLE IF NOT EXISTS Users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  email TEXT UNIQUE,
+  password TEXT,
+  shipping_address TEXT
+);
+```
 
-### 4. Express Handlers
+| id | first_name | last_name | email | password | shipping_address |
+| -- | ---------- | --------- | ----- | -------- | ---------------- |
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled.
+#### Products table
 
-### 5. JWTs
+```sql
+CREATE TABLE IF NOT EXISTS Products (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  price NUMERIC NOT NULL,
+  category TEXT
+);
+```
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+| id | name | price | category |
+| -- | ---- | ----- | -------- |
 
-### 6. QA and `README.md`
+#### Orders table
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database.
+```sql
+CREATE TABLE IF NOT EXISTS Orders (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES Users(id),
+  product_id UUID REFERENCES Products(id),
+  quantity INTEGER NOT NULL,
+  status TEXT
+);
+```
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+| id | user_id | product_id | quantity | status |
+| -- | ------- | ---------- | -------- | ------ |
+
+#### OrdersProducts table
+
+- we will need a join table to represent the many-to-many relationship between orders and products.
+
+```sql
+CREATE TABLE IF NOT EXISTS OrdersProducts (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  order_id UUID REFERENCES Orders(id) ON DELETE CASCADE,
+  product_id UUID REFERENCES Products(id) ON DELETE CASCADE,
+  quantity INTEGER
+);
+```
+
+> I updated this table and add `ON DELETE CASCADE` as in this context of the table when cascading delete is enabled, deleting a row in the child table will automatically delete the associated row in the parent table, and any other related rows in other child tables, which are also associated with that parent row.
+
+| id | order_id | product_id | quantity |
+| -- | -------- | ---------- | -------- |
