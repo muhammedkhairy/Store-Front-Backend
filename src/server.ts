@@ -1,17 +1,21 @@
 import express, { Application, Request, Response } from 'express';
 import * as dotenv from 'dotenv';
-import dbConnect from './database';
+import routes from './routes/index';
 import errorHandler from './Middleware/errorHandler';
 dotenv.config();
 
 const app: Application = express();
 const port = process.env.NODE_PORT || 3000;
 
+app.use(express.json());
+
 //test route
 app.get('/', (req: Request, res: Response) => {
   //throw new Error();
   res.send(`<h1>Hello World!</h1>`);
 });
+
+app.use('/api', routes);
 
 //Error handling middleware
 app.use(errorHandler);
@@ -29,7 +33,7 @@ app.use((_req: Request, res: Response) => {
 //express server
 app.listen(port, () => {
   console.log(`🚀 Server is listening on http://localhost:${port}`);
-  dbConnect();
+  //dbConnect();
 });
 
 export default app;

@@ -10,18 +10,6 @@ const credentials = {
   database: process.env.POSTGRES_DB,
 };
 
-/* const databaseClient = new Pool(credentials);
+const client = new Pool(credentials);
 
-export default databaseClient; */
-const dbConnect = async () => {
-  try {
-    const client = new Pool(credentials);
-    await client.connect();
-    console.log(`🛢️ ${credentials.database} database is connected successfully`);
-    return client;
-  } catch (error) {
-    console.log('There is an error while trying to connect the database:', error);
-  }
-};
-
-export default dbConnect;
+export default client;
