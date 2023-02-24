@@ -47,6 +47,9 @@ const show = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.params.id;
     const user = await userModel.getUser(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
     res.status(200).json(user);
   } catch (error) {
     next(error);

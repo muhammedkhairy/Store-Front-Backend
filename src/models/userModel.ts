@@ -1,4 +1,5 @@
 import client from '../database';
+import { hashPassword } from '../services/hashPasswords';
 
 export interface User {
   id?: string;
@@ -21,7 +22,7 @@ export class userModel {
         user.last_name,
         user.user_name,
         user.email,
-        user.password,
+        hashPassword(user.password),
         user.shipping_address,
       ];
       const result = await conn.query(sql, values);
@@ -74,7 +75,7 @@ export class userModel {
         user.last_name,
         user.user_name,
         user.email,
-        user.password,
+        user.password ? hashPassword(user.password) : undefined,
         user.shipping_address,
         id,
       ];
