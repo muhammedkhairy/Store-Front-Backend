@@ -55,9 +55,55 @@ export class userModel {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Error in getting user data`);
+      throw new Error(`Error in getting user with id: ${id} data`);
     }
   }
   // update specific user by id
+  static async updateUser(id: string, user: Partial<User>): Promise<User> {
+    const conn = await client.connect();
+    try {
+      //Check user existence
+      const existingUser = await this.getUser(id);
+      if (!existingUser) {
+        throw new Error(`User with id ${id} not found`);
+      }
+
+      const sql = `UPDATE users SET first_name = $1, last_name = $2, user_name = $3, email = $4, password = $5, shipping_address = $6 WHERE id = $7 RETURNING id, first_name, last_name, user_name, email, shipping_address;`;
+      const values = [
+        user.first_name,
+        user.last_name,
+        user.user_name,
+        user.email,
+        user.password,
+        user.shipping_address,
+        id,
+      ];
+      const result = await conn.query(sql, values);
+      conn.release();
+      if (result.rowCount === 0) {
+        throw new Error(`User with id ${id} not found`);
+      }
+      return result.rows[0];
+    } catch (error) {
+      throw new Error("Can't update user data");
+    }
+  }
+
   // delete specific user by id
+  static async deleteUser(id: string): Promise<void> {
+    const conn = await client.connect();
+    try {
+      const existingUser = await this.getUser(id);
+      if (!existingUser) {
+        throw new Error(`User with id ${id} not found`);
+      }
+
+      const sql = `DELETE FROM users WHERE ID = $1`;
+      const values = [id];
+      const result = await conn.query(sql, values);
+      conn.release();
+    } catch (error) {
+      throw new Error(`Error in deleting user with id: ${id}`);
+    }
+  }
 }

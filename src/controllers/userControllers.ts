@@ -53,8 +53,54 @@ const show = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const update = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.id;
+    const updateUser = req.body;
+    const user = await userModel.getUser(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const updateItems: Partial<User> = {
+      first_name: updateUser.first_name || user.first_name,
+      last_name: updateUser.last_name || user.last_name,
+      user_name: updateUser.user_name || user.user_name,
+      email: updateUser.email || user.email,
+      password: updateUser.password || user.password,
+      shipping_address: updateUser.shipping_address || user.shipping_address,
+    };
+
+    const updateUserData = await userModel.updateUser(userId, updateItems);
+    res.status(200).json({
+      updateUserData,
+      message: 'User successfully updated',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.id;
+    const user = await userModel.getUser(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    await userModel.deleteUser(userId);
+
+    res.status(200).json({ message: `User with id: ${userId} successfully deleted` });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   create,
   index,
   show,
+  update,
+  deleteUser,
 };

@@ -30,9 +30,9 @@ The following instructions will get you a copy on your machine containing all fi
 
 ### Installing
 
-- Run `yarn` in your terminal at the project root to install all neccessary packages to run the project
-- Make sure that the docker is installed and running in your computer.
+- Run `yarn` in your terminal at the project root to install all necessary packages to run the project
 - ==First, you should be sure that there are no running operations on default port for postgreSQL database by running the command `FOR /F "tokens=5" %P IN ('netstat -a -n -o ^| findstr :5432') DO TaskKill.exe /PID %P /F` through command line with administrator privileges.==
+- Make sure that the docker is installed and running in your computer.
 - start the database by running `docker-compose up -d` through command line.
 - You can choose to start both databases (dev and test) together by running the previous command or to start any of them by running the command `docker-compose up {container_name} -d`.
 - Run the `docker-compose ps` command to check the health status of PostgreSQL container. Once the container is reported as healthy, you should be able to connect to the PostgreSQL server.
