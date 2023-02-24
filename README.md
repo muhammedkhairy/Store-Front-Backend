@@ -32,9 +32,17 @@ The following instructions will get you a copy on your machine containing all fi
 
 - Run `yarn` in your terminal at the project root to install all neccessary packages to run the project
 - Make sure that the docker is installed and running in your computer.
-- You may need to be sure that there are no running operations on default port for postgreSQL database by running the command `FOR /F "tokens=5" %P IN ('netstat -a -n -o ^| findstr :5432') DO @ECHO TaskKill.exe /PID %P /F` through command line with administrator privileges
+- ==First, you should be sure that there are no running operations on default port for postgreSQL database by running the command `FOR /F "tokens=5" %P IN ('netstat -a -n -o ^| findstr :5432') DO TaskKill.exe /PID %P /F` through command line with administrator privileges.==
 - start the database by running `docker-compose up -d` through command line.
 - You can choose to start both databases (dev and test) together by running the previous command or to start any of them by running the command `docker-compose up {container_name} -d`.
+- Run the `docker-compose ps` command to check the health status of PostgreSQL container. Once the container is reported as healthy, you should be able to connect to the PostgreSQL server.
+
+```markdown
+$ docker-compose ps
+NAME IMAGE COMMAND SERVICE CREATED STATUS PORTS
+postgres postgres:latest "docker-entrypoint.s…" postgres About a minute ago Up 58 seconds (healthy) 0.0.0.0:5432->5432/tcp
+```
+
 - Now the database is set and ready for our project.
 
 ## Running the scripts
@@ -68,8 +76,8 @@ CREATE TABLE IF NOT EXISTS Users (
 );
 ```
 
-| id | first_name | last_name | email | password | shipping_address |
-| -- | ---------- | --------- | ----- | -------- | ---------------- |
+| id  | first_name | last_name | email | password | shipping_address |
+| --- | ---------- | --------- | ----- | -------- | ---------------- |
 
 #### Products table
 
@@ -82,8 +90,8 @@ CREATE TABLE IF NOT EXISTS Products (
 );
 ```
 
-| id | name | price | category |
-| -- | ---- | ----- | -------- |
+| id  | name | price | category |
+| --- | ---- | ----- | -------- |
 
 #### Orders table
 
@@ -97,8 +105,8 @@ CREATE TABLE IF NOT EXISTS Orders (
 );
 ```
 
-| id | user_id | product_id | quantity | status |
-| -- | ------- | ---------- | -------- | ------ |
+| id  | user_id | product_id | quantity | status |
+| --- | ------- | ---------- | -------- | ------ |
 
 #### OrdersProducts table
 
@@ -115,5 +123,5 @@ CREATE TABLE IF NOT EXISTS OrdersProducts (
 
 > I updated this table and add `ON DELETE CASCADE` as in this context of the table when cascading delete is enabled, deleting a row in the child table will automatically delete the associated row in the parent table, and any other related rows in other child tables, which are also associated with that parent row.
 
-| id | order_id | product_id | quantity |
-| -- | -------- | ---------- | -------- |
+| id  | order_id | product_id | quantity |
+| --- | -------- | ---------- | -------- |
