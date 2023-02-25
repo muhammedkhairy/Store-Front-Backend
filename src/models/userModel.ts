@@ -1,5 +1,6 @@
 import client from '../database';
 import { hashPassword } from '../services/hashPasswords';
+import { customError } from '../middleware/errorHandler';
 
 export interface User {
   id?: string;
@@ -48,17 +49,29 @@ export class userModel {
 
   // get specific user by id
   static async getUser(id: string): Promise<User> {
+
     const conn = await client.connect();
     try {
       const sql = `SELECT id, first_name, last_name, user_name, email, shipping_address  FROM users WHERE id = $1;`;
       const value = [id];
       const result = await conn.query(sql, value);
       conn.release();
+
+      console.log(result.rows[0]);
+
+      if (result.rows[0] === 0) {
+        const error: customError = new Error(`User with id ${id} not found`);
+        error.statusCode = 404;
+        error.errorCode = 'USER_NOT_FOUND';
+        throw error;
+      }
+      
       return result.rows[0];
     } catch (error) {
       throw new Error(`Error in getting user with id: ${id} data`);
     }
   }
+
   // update specific user by id
   static async updateUser(id: string, user: Partial<User>): Promise<User> {
     const conn = await client.connect();
@@ -108,3 +121,7 @@ export class userModel {
     }
   }
 }
+function uuidv4(id: string) {
+  throw new Error('Function not implemented.');
+}
+

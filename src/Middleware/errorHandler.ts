@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-interface customError extends Error {
+export interface customError extends Error {
   statusCode?: number;
   errorCode?: string;
 }
@@ -13,12 +13,13 @@ const errorHandler = (err: customError, _req: Request, res: Response, next: Next
   const message = err.message || 'Internal server error';
   const response = {
     status,
-    error: {
+    "error detail": {
       code: errorCode,
       message,
     },
   };
   res.status(status).json(response);
+  next(err);
 };
 
 export default errorHandler;

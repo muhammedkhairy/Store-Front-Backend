@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { User, userModel } from '../models/userModel';
 import { checkEmailExists, checkUserExists } from '../services/userValidation';
 
+// Create new users
 const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, user_name } = req.body;
@@ -34,6 +35,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+// Display all users in database
 const index = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await userModel.getALlUsers();
@@ -43,6 +45,8 @@ const index = async (_req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+
+// Display specific user by its id
 const show = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.params.id;
@@ -56,6 +60,8 @@ const show = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+
+// Update specific user details
 const update = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.params.id;
@@ -84,6 +90,8 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+
+// Delete specific user from the database with its id
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.params.id;
