@@ -11,7 +11,6 @@ const secret = process.env.JWT_SECRET;
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = String(req.headers.authorization?.split(' ')[1]);
-    console.log(token);
 
     if (!token) {
       const error: customError = new Error('No Token provided');

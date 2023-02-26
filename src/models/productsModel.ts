@@ -1,6 +1,6 @@
 import client from '../database';
 import { customError } from '../middleware/errorHandler';
-import validateUUID from '../utiles/validateUUID';
+import validateUUID from '../utils/validateUUID';
 
 export interface Product {
   id?: string;
@@ -15,11 +15,7 @@ export class productModel {
     const conn = await client.connect();
     try {
       const sql = `INSERT INTO products (name, price, category) VALUES ($1, $2, $3) RETURNING *;`;
-      const values = [
-        product.name,
-        product.price,
-        product.category,
-      ];
+      const values = [product.name, product.price, product.category];
       const result = await conn.query(sql, values);
       conn.release();
       return result.rows[0];
@@ -88,12 +84,7 @@ export class productModel {
       }
 
       const sql = `UPDATE products SET name = $1, price = $2, category = $3 WHERE id = $4 RETURNING *;`;
-      const values = [
-        product.name,
-        product.price,
-        product.category,
-        id,
-      ];
+      const values = [product.name, product.price, product.category, id];
       const result = await conn.query(sql, values);
       conn.release();
 
@@ -135,5 +126,4 @@ export class productModel {
       throw customErr;
     }
   }
-
 }

@@ -1,7 +1,7 @@
 import client from '../database';
-import { hashPassword } from '../utiles/hashPasswords';
+import { hashPassword } from '../utils/hashPasswords';
 import { customError } from '../middleware/errorHandler';
-import validateUUID from '../utiles/validateUUID';
+import validateUUID from '../utils/validateUUID';
 
 export interface User {
   id?: string;

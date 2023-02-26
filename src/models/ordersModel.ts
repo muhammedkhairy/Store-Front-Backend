@@ -1,6 +1,6 @@
 import client from '../database';
 import { customError } from '../middleware/errorHandler';
-import validateUUID from '../utiles/validateUUID';
+import validateUUID from '../utils/validateUUID';
 
 export interface Order {
   id?: string;

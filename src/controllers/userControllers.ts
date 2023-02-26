@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { User, userModel } from '../models/userModel';
-import { checkEmailExists, checkUserExists } from '../utiles/userValidation';
+import { checkEmailExists, checkUserExists } from '../utils/userValidation';
 
 // Create new users
 const create = async (req: Request, res: Response, next: NextFunction) => {

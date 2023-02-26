@@ -50,7 +50,6 @@ const autHelper = async (email: string, password: string): Promise<User> => {
 };
 
 const generateToken = (user: User): string => {
-  //console.log('Generating token for user:', user);
   const payload = {
     userId: user.id,
     email: user.email,

@@ -1,6 +1,6 @@
 import client from '../database';
 import { Order, ordersModel } from '../models/ordersModel';
-import validateUUID from '../utiles/validateUUID';
+import validateUUID from '../utils/validateUUID';
 import { customError } from '../middleware/errorHandler';
 
 // Get all orders by user id

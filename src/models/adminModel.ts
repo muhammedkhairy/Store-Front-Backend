@@ -1,5 +1,5 @@
 import client from '../database';
-import { hashPassword } from '../utiles/hashPasswords';
+import { hashPassword } from '../utils/hashPasswords';
 
 export interface Admin {
   id?: string;

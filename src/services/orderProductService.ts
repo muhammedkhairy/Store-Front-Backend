@@ -2,8 +2,7 @@ import client from '../database';
 import { customError } from '../middleware/errorHandler';
 import { ordersModel } from '../models/ordersModel';
 import { productModel } from '../models/productsModel';
-import validateUUID from '../utiles/validateUUID';
-
+import validateUUID from '../utils/validateUUID';
 
 interface OrderProduct {
   id?: string;
@@ -12,10 +11,8 @@ interface OrderProduct {
   quantity: number;
 }
 
-
 // Create productOrder
 export const createOrderProduct = async (orderProduct: OrderProduct): Promise<OrderProduct> => {
-  
   try {
     const conn = await client.connect();
 
