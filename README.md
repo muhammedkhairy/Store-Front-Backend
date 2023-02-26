@@ -52,6 +52,16 @@ postgres postgres:latest "docker-entrypoint.s…" postgres About a minute ago Up
 
 - Now the database is set and ready for our project.
 
+### How to use tables and interact with database
+
+As required in project to protect users endpoints: create, show all users, show specific user which I did in this project you have to follow these instruction to interacte with the database:
+
+- I created a new table called admins with be generated automatically at the very beginning of database migration.
+- You can use this table through the endpoint `api/admin` as POST HTTP Method.
+- You can register only one admin user. Remember the email and password very carefully as you can't create more than one admin.
+- You this admin user to generate the required token to complete interacting with others tables in database.
+- Once you create users in user table through endpoint `api/users` as POST HTTP method. you can use the token for new users to do what you want with the database.
+
 ## Running the scripts
 
 ### Feeding database with tables (Migration)
@@ -70,65 +80,3 @@ postgres postgres:latest "docker-entrypoint.s…" postgres About a minute ago Up
 
 - After creating neccessary database by docker it is time to add tables to it, you can run `yarn migrate:up` through command line which will tigger the `npx db-migare up` and creating the following tables:
 
-#### Users table
-
-```sql
-CREATE TABLE IF NOT EXISTS Users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  first_name VARCHAR(50) NOT NULL,
-  last_name VARCHAR(50) NOT NULL,
-  email TEXT UNIQUE,
-  password TEXT,
-  shipping_address TEXT
-);
-```
-
-| id  | first_name | last_name | user_name | email | password | shipping_address |
-| --- | ---------- | --------- | --------- | ----- | -------- | ---------------- |
-
-#### Products table
-
-```sql
-CREATE TABLE IF NOT EXISTS Products (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  price NUMERIC NOT NULL,
-  category TEXT
-);
-```
-
-| id  | name | price | category |
-| --- | ---- | ----- | -------- |
-
-#### Orders table
-
-```sql
-CREATE TABLE IF NOT EXISTS Orders (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES Users(id),
-  product_id UUID REFERENCES Products(id),
-  quantity INTEGER NOT NULL,
-  status TEXT
-);
-```
-
-| id  | user_id | product_id | quantity | status |
-| --- | ------- | ---------- | -------- | ------ |
-
-#### OrdersProducts table
-
-- we will need a join table to represent the many-to-many relationship between orders and products.
-
-```sql
-CREATE TABLE IF NOT EXISTS OrdersProducts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  order_id UUID REFERENCES Orders(id) ON DELETE CASCADE,
-  product_id UUID REFERENCES Products(id) ON DELETE CASCADE,
-  quantity INTEGER
-);
-```
-
-> I updated this table and add `ON DELETE CASCADE` as in this context of the table when cascading delete is enabled, deleting a row in the child table will automatically delete the associated row in the parent table, and any other related rows in other child tables, which are also associated with that parent row.
-
-| id  | order_id | product_id | quantity |
-| --- | -------- | ---------- | -------- |

@@ -9,7 +9,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
 
     // Check if email and password are provided
     if (!email || !password) {
-      res.status(400).json({ message: 'Email and password are required.' });
+      return res.status(400).json({ message: 'Email and password are required.' });
     }
 
     // Check if email already exists

@@ -127,7 +127,7 @@ export class userModel {
       //Check user existence
       const existingUser = await this.getUser(id);
       if (!existingUser) {
-        const error: customError = new Error(`User not found`);
+        const error: customError = new Error(`user not found`);
         error.statusCode = 404;
         error.errorCode = 'USER_NOT_FOUND';
         throw error;
@@ -135,10 +135,14 @@ export class userModel {
 
       const sql = `DELETE FROM users WHERE ID = $1`;
       const values = [id];
-      const result = await conn.query(sql, values);
+      await conn.query(sql, values);
       conn.release();
     } catch (error) {
-      throw new Error(`Error in deleting user with id: ${id}`);
+      const customErr = error as customError;
+      customErr.message = `Error in deleting user with id: ${id}`;
+      customErr.statusCode = customErr.statusCode || 500;
+      customErr.errorCode = customErr.errorCode || 'SERVER_ERROR';
+      throw customErr;
     }
   }
 }
