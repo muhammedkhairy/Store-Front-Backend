@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import client from '../database';
 import { User } from '../models/userModel';
 import * as dotenv from 'dotenv';
@@ -7,16 +8,16 @@ import { customError } from '../middleware/errorHandler';
 dotenv.config();
 
 const pepper = process.env.BCRYPT_PASSWORD;
+const secret = process.env.JWT_SECRET;
 
 const autHelper = async (email: string, password: string): Promise<User> => {
-  let conn;
+  const conn = await client.connect();
   try {
-    conn = await client.connect();
     const sql = `SELECT * FROM users WHERE email = $1;`;
     const values = [email];
     const result = await conn.query(sql, values);
 
-    if(result.rowCount === 0) {
+    if (result.rowCount === 0) {
       const error: customError = new Error(`User with email ${email} not found`);
       error.statusCode = 404;
       error.errorCode = 'USER_NOT_FOUND';
@@ -24,9 +25,9 @@ const autHelper = async (email: string, password: string): Promise<User> => {
     }
 
     const user = result.rows[0];
-    const passwordsMatch = bcrypt.compareSync((password + pepper), user.password);
+    const passwordsMatch = bcrypt.compareSync(password + pepper, user.password);
 
-    if(!passwordsMatch) {
+    if (!passwordsMatch) {
       const error: customError = new Error(`Invalid password for user with email ${email}`);
       error.statusCode = 401;
       error.errorCode = 'INVALID_PASSWORD';
@@ -35,8 +36,6 @@ const autHelper = async (email: string, password: string): Promise<User> => {
 
     delete user.password;
     return user;
-
-
   } catch (error) {
     const customErr = error as customError;
     customErr.message = `Something went wrong with login credentials: ${customErr.message}`;
@@ -44,10 +43,23 @@ const autHelper = async (email: string, password: string): Promise<User> => {
     customErr.errorCode = customErr.errorCode || 'SERVER_ERROR';
     throw customErr;
   } finally {
-    if(conn){
+    if (conn) {
       conn.release();
     }
   }
 };
 
-export default autHelper;
+const generateToken = (user: User): string => {
+  //console.log('Generating token for user:', user);
+  const payload = {
+    userId: user.id,
+    email: user.email,
+  };
+  const token = jwt.sign(payload, String(secret), { expiresIn: '2d' });
+  return token;
+};
+
+export default {
+  autHelper,
+  generateToken,
+};

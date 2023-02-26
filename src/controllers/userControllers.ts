@@ -5,7 +5,12 @@ import { checkEmailExists, checkUserExists } from '../services/userValidation';
 // Create new users
 const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, user_name } = req.body;
+    const { email, user_name, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password) {
+      res.status(400).json({ message: 'Email and password are required.' });
+    }
 
     // Check if email already exists
     const emailExists = await checkEmailExists(email);
@@ -45,7 +50,6 @@ const index = async (_req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-
 // Display specific user by its id
 const show = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -59,7 +63,6 @@ const show = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
-
 
 // Update specific user details
 const update = async (req: Request, res: Response, next: NextFunction) => {
@@ -89,7 +92,6 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
-
 
 // Delete specific user from the database with its id
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {

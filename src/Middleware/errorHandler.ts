@@ -13,7 +13,7 @@ const errorHandler = (err: customError, _req: Request, res: Response, next: Next
   const message = err.message || 'Internal server error';
   const response = {
     status,
-    "error detail": {
+    'error detail': {
       code: errorCode,
       message,
     },

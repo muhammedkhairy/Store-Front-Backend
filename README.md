@@ -11,27 +11,34 @@ The following instructions will get you a copy on your machine containing all fi
 - Clone the project to your computer with `git clone` command.
 - Run `yarn` in your terminal at the project root to install all neccessary packages to run the project.
 - Create a .env file in the root directory of the project. containing the following variables:
-  - nodejs server listening port:
-    - NODE_PORT
-  - postgres development database credentials:
-    - POSTGRES_HOST.
-    - POSTGRES_USER.
-    - POSTGRES_PASSWORD.
-    - POSTGRES_PORT.
-    - POSTGRES_DB.
-  - postgres testing database credentials:
-    - POSTGRES_HOST_TEST.
-    - POSTGRES_USER_TEST.
-    - POSTGRES_PASSWORD_TEST.
-    - POSTGRES_PORT_TEST.
-    - POSTGRES_DB_TEST.
-  - db-migrate default environment:
-    - NODE_ENV.
+
+```dotenv
+ - nodejs server listening port:
+   - NODE_PORT
+ - postgres development database credentials:
+   - POSTGRES_HOST.
+   - POSTGRES_USER.
+   - POSTGRES_PASSWORD.
+   - POSTGRES_PORT.
+   - POSTGRES_DB.
+ - postgres testing database credentials:
+   - POSTGRES_HOST_TEST.
+   - POSTGRES_USER_TEST.
+   - POSTGRES_PASSWORD_TEST.
+   - POSTGRES_PORT_TEST.
+   - POSTGRES_DB_TEST.
+ - db-migrate default environment:
+   - NODE_ENV.
+ - bcrypt and JWT:
+   - BCRYPT_PASSWORD.
+   - SALT_ROUNDS.
+   - JWT_SECRET.
+```
 
 ### Installing
 
 - Run `yarn` in your terminal at the project root to install all necessary packages to run the project
--First, you should be sure that there are no running operations on default port for postgreSQL database by running the command `FOR /F "tokens=5" %P IN ('netstat -a -n -o ^| findstr :5432') DO TaskKill.exe /PID %P /F` through command line with administrator privileges.
+- First, you should be sure that there are no running operations on default port for postgreSQL database by running the command `FOR /F "tokens=5" %P IN ('netstat -a -n -o ^| findstr :5432') DO TaskKill.exe /PID %P /F` through command line with administrator privileges.
 - Make sure that the docker is installed and running in your computer.
 - start the database by running `docker-compose up -d` through command line.
 - You can choose to start both databases (dev and test) together by running the previous command or to start any of them by running the command `docker-compose up {container_name} -d`.
