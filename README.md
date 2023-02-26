@@ -119,14 +119,16 @@ As required in project to protect users endpoints: create, show all users, show 
 
 ### lints scripts
 
-- `yarn eslint` script As eslint package known for > Statically analyzes your code to quickly find problems. It is built into most text editors and you can run ESLint as part of your continuous integration pipeline. this script will tiger the command `eslint . --fix` and we add the flag `fix` to fix some code problems automatically.
+- `yarn eslint` script As eslint package known for 
+> Statically analyzes your code to quickly find problems. It is built into most text editors and you can run ESLint as part of your continuous integration pipeline. this script will tiger the command `eslint . --fix` and we add the flag `fix` to fix some code problems automatically.
 - `yarn prettier` script, Prettier package is an opinionated code formatter. this script will tiger the command `prettier . --write`, and we add the flag `write` to format the code as we customize it to do.
 - If you want to run the two commands together, I made a script for you `yarn lints` which will tiger the the two previous scripts.
 
 ### Unit tests
 
 - Unit Testing is defined as a type of software testing where individual components of a software are tested.
-- In our Project we are using jasmine `yarn add -D jasmine`, as from its documentation > Jasmine is a behavior-driven development framework for testing JavaScript code. It does not depend on any other JavaScript frameworks. It does not require a DOM. And it has a clean, obvious syntax so that you can easily write tests.
+- In our Project we are using jasmine `yarn add -D jasmine`, as from its documentation 
+> Jasmine is a behavior-driven development framework for testing JavaScript code. It does not depend on any other JavaScript frameworks. It does not require a DOM. And it has a clean, obvious syntax so that you can easily write tests.
 - We use another package called `jasmine spec reporter` to format the output of the tests, which can be installed through `yarn add -D jasmine-spec-reporter`.
 - We also used supertest package for performing tests on the different endpoints, which can be installed through `yarn add -D supertest`
 

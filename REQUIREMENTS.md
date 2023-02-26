@@ -19,26 +19,36 @@ In addition to these folders, we'll need to set up a few other files:
 - server.ts: The main file that initializes the Express app and listens for incoming requests.
 - database.ts: A file that contains the basic connection logic to connect to the database. we'll set up a connection pool to connect to the database using a library like pg.
 
-### Users
+### Admin endpoints
 
-- Index [token required] (GET - `api/users`)
-- Show [token required] (GET - `api/users/:id`)
-- Create [token required] (POST - `api/users`)
-- Update (POST `api/users/:id`)
-- Delete (DELETE `api/users/:id`)
+- As we talked in README file that we create that endpoint to gain access to the database.
+- We have here two endpoints:
+  - First, to make a single admin user you should hit the endpoint `api/createAdminUser` and pass through the body a json object contains an email and password.
+  - Second, after successfully registered in the database. you should hit `api/authAdmin` endpoint to gain your own token which helping you in the rest of endpoints.
+  - After you create a users you can use their generated token to continue in other endpoints.
+
+### Users endpoints
+
+- to create a new user you have to pass the token from admin user and pass a json object in the body contains [firstname, lastname, username, email, password, and optionally a shipping address], you can hit the endpoint (POST - `api/users`) which require a token to receive these data.
+- to get all users registered in the database you can hit the endpoint (GET - `api/users`) which require a token to receive these data.
+- to get one user registered in the database you can hit the endpoint (GET - `api/users/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
+- to update a specific user registered in the database you can hit the endpoint (PATCH - `api/users/:id`) and pass a valid UUID id to get this user data, then pass new data through body as json object. this endpoint also require a token to receive and update these data.
+- to delete a specific user registered in the database you can hit the endpoint (DELETE - `api/users/:id`) and pass a valid UUID id to delete this user.
 
 ### Products
 
-- Index
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
+- to enter a new product to the database you have to pass the token from admin user or any user you have  and pass a json object in the body contains [product name, price, and optionally a discription], you can hit the endpoint (POST - `api/products`) which require a token to receive these data.
+- to get all the products in the database you can hit the endpoint (GET - `api/products`) which require a token to receive these data.
+- to get one specific product from the database you can hit the endpoint (GET - `api/products/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
+- to update a specific product saved in the database you can hit the endpoint (PATCH - `api/products/:id`) and pass a valid UUID id to get this user data, then pass new data through body as json object. this endpoint also require a token to receive and update these data.
+- to delete a specific product in the database you can hit the endpoint (DELETE - `api/products/:id`) and pass a valid UUID id to delete this product.
 
 #### Orders
 
-- Current Order by user [args: user id](token required)
-- [OPTIONAL] Completed Orders by user [args: user id](token required)
+- to enter a new order to the database you have to pass the token from admin user or any user you have  and pass a json object in the body contains [product name, price, and optionally a discription], you can hit the endpoint (POST - `api/orders`) which require a token to receive these data.
+- to get one specific user's order  from the database you can hit the endpoint (GET - `api/orders/users/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
+- to get one specific product's order  from the database you can hit the endpoint (GET - `api/orders/product/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
+- to delete a specific order in the database you can hit the endpoint (DELETE - `api/orders/:id`) and pass a valid UUID id to delete this order.
 
 ## Data Shapes
 

@@ -2,10 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import { Order, ordersModel } from '../models/ordersModel';
 import * as ordersService from '../services/orderService';
 import { customError } from '../middleware/errorHandler';
-import validateUUID from '../services/validateUUID';
 
 // Get all orders by user id
-export const getOrdersByUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getOrdersByUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId: string = req.params.userId;
     const orders: Order[] = await ordersService.getOrdersByUser(userId);
@@ -16,7 +15,7 @@ export const getOrdersByUser = async (req: Request, res: Response, next: NextFun
 };
 
 // Get all orders by product id
-export const getOrdersByProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getOrdersByProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const productId: string = req.params.productId;
     const orders: Order[] = await ordersService.getOrdersByProduct(productId);
@@ -27,7 +26,7 @@ export const getOrdersByProduct = async (req: Request, res: Response, next: Next
 };
 
 // Add a new order
-export const addOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const addOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { userId, productId, quantity, status }: Order = req.body;
 
@@ -62,19 +61,37 @@ export const addOrder = async (req: Request, res: Response, next: NextFunction):
 };
 
 // Update an existing order
-export const updateOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const updateOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // TODO: implement this function
+    const id = req.params.id;
+    const order: Order = req.body;
+    const updatedOrder = await ordersModel.updateOrder (id, order);
+    res.status(200).json({
+      updatedOrder,
+      message: 'Order updated successfully.'
+    });
+  } catch (error) {
+    next(error);
+  };
+};
+
+
+// Delete an existing order
+const deleteOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const id = req.params.id;
+    await ordersModel.deleteOrder(id);
+    res.status(204).json({ message: `Order with id: ${id} successfully deleted` });
   } catch (error) {
     next(error);
   }
 };
 
-// Delete an existing order
-export const deleteOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    // TODO: implement this function
-  } catch (error) {
-    next(error);
-  }
+
+export default {
+  getOrdersByUser,
+  getOrdersByProduct,
+  addOrder,
+  updateOrder,
+  deleteOrder,
 };

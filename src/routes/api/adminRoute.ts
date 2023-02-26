@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import createAdminUser from '../../controllers/adminController';
-import { authAdmin } from '../../services/authenticateAdmin';
+import { authAdmin } from '../../utiles/authenticateAdmin';
 
 const routes: Router = Router();
 
