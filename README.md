@@ -31,18 +31,13 @@ The following instructions will get you a copy on your machine containing all fi
 ```dotenv
  - nodejs server listening port:
    - NODE_PORT
- - postgres development database credentials:
+ - postgres database credentials:
    - POSTGRES_HOST.
    - POSTGRES_USER.
    - POSTGRES_PASSWORD.
    - POSTGRES_PORT.
    - POSTGRES_DB.
- - postgres testing database credentials:
-   - POSTGRES_HOST_TEST.
-   - POSTGRES_USER_TEST.
-   - POSTGRES_PASSWORD_TEST.
-   - POSTGRES_PORT_TEST.
-   - POSTGRES_DB_TEST.
+   - POSTGRES_DB_TEST
  - db-migrate default environment:
    - NODE_ENV.
  - bcrypt and JWT:
