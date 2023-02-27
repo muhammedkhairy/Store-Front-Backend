@@ -4,6 +4,18 @@ The company stakeholders want to create an online storefront to showcase their g
 
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application.
 
+- [API Requirements](#api-requirements)
+  - [API Endpoints](#api-endpoints)
+    - [Admin endpoints](#admin-endpoints)
+    - [Users endpoints](#users-endpoints)
+    - [Products](#products)
+    - [Orders](#orders)
+  - [Data Shapes](#data-shapes)
+    - [Users table](#users-table)
+    - [Products table](#products-table)
+    - [Orders table](#orders-table)
+    - [OrdersProducts table](#ordersproducts-table)
+
 ## API Endpoints
 
 Here's a basic outline of how we can set up the MVC pattern for our API endpoints:
@@ -23,8 +35,8 @@ In addition to these folders, we'll need to set up a few other files:
 
 - As we talked in README file that we create that endpoint to gain access to the database.
 - We have here two endpoints:
-  - First, to make a single admin user you should hit the endpoint `api/createAdminUser` and pass through the body a json object contains an email and password.
-  - Second, after successfully registered in the database. you should hit `api/authAdmin` endpoint to gain your own token which helping you in the rest of endpoints.
+  - First, to make a single admin user you should hit the endpoint `api/admin` and pass through the body a json object contains an email and password.
+  - Second, after successfully registered in the database. you should hit `api/admin/login` endpoint to gain your own token which helping you in the rest of endpoints.
   - After you create a users you can use their generated token to continue in other endpoints.
 
 ### Users endpoints
@@ -37,17 +49,17 @@ In addition to these folders, we'll need to set up a few other files:
 
 ### Products
 
-- to enter a new product to the database you have to pass the token from admin user or any user you have  and pass a json object in the body contains [product name, price, and optionally a discription], you can hit the endpoint (POST - `api/products`) which require a token to receive these data.
+- to enter a new product to the database you have to pass the token from admin user or any user you have and pass a json object in the body contains [product name, price, and optionally a discription], you can hit the endpoint (POST - `api/products`) which require a token to receive these data.
 - to get all the products in the database you can hit the endpoint (GET - `api/products`) which require a token to receive these data.
 - to get one specific product from the database you can hit the endpoint (GET - `api/products/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
 - to update a specific product saved in the database you can hit the endpoint (PATCH - `api/products/:id`) and pass a valid UUID id to get this user data, then pass new data through body as json object. this endpoint also require a token to receive and update these data.
 - to delete a specific product in the database you can hit the endpoint (DELETE - `api/products/:id`) and pass a valid UUID id to delete this product.
 
-#### Orders
+### Orders
 
-- to enter a new order to the database you have to pass the token from admin user or any user you have  and pass a json object in the body contains [product name, price, and optionally a discription], you can hit the endpoint (POST - `api/orders`) which require a token to receive these data.
-- to get one specific user's order  from the database you can hit the endpoint (GET - `api/orders/users/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
-- to get one specific product's order  from the database you can hit the endpoint (GET - `api/orders/product/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
+- to enter a new order to the database you have to pass the token from admin user or any user you have and pass a json object in the body contains [product name, price, and optionally a discription], you can hit the endpoint (POST - `api/orders`) which require a token to receive these data.
+- to get one specific user's order from the database you can hit the endpoint (GET - `api/orders/users/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
+- to get one specific product's order from the database you can hit the endpoint (GET - `api/orders/product/:id`) and pass a valid UUID id to get this user data, which also require a token to receive these data.
 - to delete a specific order in the database you can hit the endpoint (DELETE - `api/orders/:id`) and pass a valid UUID id to delete this order.
 
 ## Data Shapes
@@ -114,3 +126,5 @@ CREATE TABLE IF NOT EXISTS OrdersProducts (
 
 | id  | order_id | product_id | quantity |
 | --- | -------- | ---------- | -------- |
+
+[Back to README](./README.md)

@@ -4,8 +4,12 @@ The company stakeholders want to create an online storefront to showcase their g
 
 - [Storefront Backend Project](#storefront-backend-project)
   - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installing](#installing)
+    - [Installing -- Very important](#installing----very-important)
+    - [Running the database](#running-the-database)
+      - [Windows OS](#windows-os)
+      - [Mac OS](#mac-os)
+      - [Ubuntu Linux OS](#ubuntu-linux-os)
+    - [Install dependencies](#install-dependencies)
   - [How to use use and interact with database](#how-to-use-use-and-interact-with-database)
   - [Running the scripts](#running-the-scripts)
     - [Start the project](#start-the-project)
@@ -16,52 +20,109 @@ The company stakeholders want to create an online storefront to showcase their g
     - [Unit tests](#unit-tests)
     - [Compiling code](#compiling-code)
     - [Compiling code and run tests](#compiling-code-and-run-tests)
+  - [EndPoints and tables schemas](#endpoints-and-tables-schemas)
   - [Credits](#credits)
 
 ## Getting Started
 
 The following instructions will get you a copy on your machine containing all files and folders you need to start testing the API.
 
-### Prerequisites
+### Installing -- Very important
 
-- Clone the project to your computer with `git clone` command.
-- Run `yarn` in your terminal at the project root to install all necessary packages to run the project.
-- Create a .env file in the root directory of the project. containing the following variables:
+- Create a `.env` file in the root directory of the project, copy the following code and paste it in the `.env` file and add your own variables.
+- The part of <u>POSTGRES DATABASE CREDENTIALS</u> in .env file should be filled it with the variables you will use while setting up the database.
+  - meaning if you choose to name the development database `store` and testing database `store_test` you must set the same name in .env file `POSTGRES_DEV_DB=store`, `POSTGRES_TEST_DB=store_test`.
+  - In part [Running the database](#running-the-database) I give you a hint on how you can set the variables (database name, username, and password). Feel free to change it as you want but make sure to put these values in .env as I explained earlier.
 
 ```dotenv
- - nodejs server listening port:
-   - NODE_PORT
- - postgres database credentials:
-   - POSTGRES_HOST.
-   - POSTGRES_USER.
-   - POSTGRES_PASSWORD.
-   - POSTGRES_PORT.
-   - POSTGRES_DB.
-   - POSTGRES_DB_TEST
- - db-migrate default environment:
-   - NODE_ENV.
- - bcrypt and JWT:
-   - BCRYPT_PASSWORD.
-   - SALT_ROUNDS.
-   - JWT_SECRET.
+## NODE PORT ##
+NODE_PORT=
+
+## DEFAULT ENVIRONMENT ##
+NODE_ENV=dev
+
+## POSTGRES DATABASE CREDENTIALS ##
+POSTGRES_HOST=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_DEV_PORT=
+POSTGRES_TEST_PORT=
+POSTGRES_DEV_DB=
+POSTGRES_TEST_DB=
+
+
+## AUTHENTICATION VARS ##
+BCRYPT_PASSWORD=
+SALT_ROUNDS=
+JWT_SECRET=
 ```
 
-### Installing
+### Running the database
 
-- Run `yarn` in your terminal at the project root to install all necessary packages to run the project
-- First, you should be sure that there are no running operations on default port for postgreSQL database by running the command `FOR /F "tokens=5" %P IN ('netstat -a -n -o ^| findstr :5432') DO TaskKill.exe /PID %P /F` through command line with administrator privileges. otherwise you may got error `psql: error: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "your-username"` when trying to connect to the database
-- Make sure that the docker is installed and running in your computer.
-- start the database by running `docker-compose up -d` through command line.
-- You can choose to start both databases (dev and test) together by running the previous command or to start any of them by running the command `docker-compose up {container_name} -d`.
-- Run the `docker-compose ps` command to check the health status of PostgreSQL container. Once the container is reported as healthy, you should be able to connect to the PostgreSQL server.
+Here are the steps you should follow in create the required databases and run them.
 
-```markdown
-$ docker-compose ps
-NAME IMAGE COMMAND SERVICE CREATED STATUS PORTS
-postgres postgres:latest "docker-entrypoint.s…" postgres About a minute ago Up 58 seconds (healthy) 0.0.0.0:5432->5432/tcp
+#### Windows OS
+
+1. Install PostgreSQL on your Windows machine if it's not already installed. You can download it from the official website: <https://www.postgresql.org/download/windows/>.
+
+2. Open the Command Prompt or PowerShell on your Windows machine.
+
+3. Type the following command to access the PostgreSQL command-line interface: `psql -U postgres`
+
+4. Enter the password for the default PostgreSQL user 'postgres' when prompted.
+
+5. Once you're in the PostgreSQL CLI, you can create a new database using the following command:
+
+   - `CREATE DATABASE store;` for dev database.
+   - `CREATE DATABASE store_test;` for test database.
+
+6. When you run `\l`, PostgreSQL will display a list of all of the databases on the server.
+
+7. `\c` is a command used in PostgreSQL's command-line interface, psql, to connect to a different database. It allows you to change the current connection to a new database.
+
+8. To exit the PostgreSQL CLI, you can type: `\q;`.
+
+9. You can also create users and grant them permissions to the database using the following commands:
+
+```sql
+CREATE USER admin WITH PASSWORD '1234';
+ALTER USER admin WITH SUPERUSER;
+GRANT ALL PRIVILEGES ON DATABASE store TO admin;
+GRANT ALL PRIVILEGES ON DATABASE store_test TO admin;
 ```
 
-- Now the database is set and ready for our project.
+10 . After creating the database, you can use it in your application by connecting to it using the credentials in the .env file.
+
+#### Mac OS
+
+1. Open the Terminal application on your Mac.
+
+2. Install PostgreSQL using Homebrew by running the following command: `brew install postgresql`
+
+3. After installing PostgreSQL, start the PostgreSQL server by running the following command: `brew services start postgresql`
+
+4. Once the server is running, you can access the PostgreSQL command-line interface by running the following command: `psql postgres`.
+
+5. Continue from here as previously Windows OS.
+
+#### Ubuntu Linux OS
+
+1. Open a terminal window on your Ubuntu machine.
+
+2. Install PostgreSQL by running the following command: `sudo apt-get install postgresql`.
+
+3. After installing PostgreSQL, start the PostgreSQL server by running the following command: `sudo service postgresql start`.
+
+4. Once the server is running, you can access the PostgreSQL command-line interface by running the following command: `sudo -u postgres psql`.
+
+5. Continue from here as previously Windows OS.
+
+Note that these steps assume that you're using the default PostgreSQL configuration. If you've customized your PostgreSQL installation or are using a non-default configuration, you may need to adjust these steps accordingly.
+
+### Install dependencies
+
+- If you forget 😊, please clone the project to your computer with `git clone` command.
+- Run `yarn` in your terminal at the project root to install all necessary packages to run the project.
 
 ## How to use use and interact with database
 
@@ -139,7 +200,24 @@ As required in project to protect users endpoints: create, show all users, show 
 
 ### Compiling code and run tests
 
-- `yarn startDev` will tiger the command `rimraf dist && npx tsc && jasmine` which will delete dist folder then compile the TypeScript code into newly created test folder then run unit tests on the files.
+- `yarn startTests` will tiger the command `rimraf dist && npx tsc && jasmine` which will delete dist folder then compile the TypeScript code into newly created test folder then run unit tests on the files.
+- This script is modified by a way to run database tests on a test database to not touch the original database.`"startTests": "rimraf dist && set NODE_ENV=test && db-migrate up test && npx tsc && jasmine && db-migrate reset"`
+
+  1. `"rimraf dist"`: This command deletes the "dist" directory, where the compiled TypeScript files are stored.
+
+  2. `"set NODE_ENV=test"`: This command sets the NODE_ENV environment variable to "test". This is a common practice for setting up different environments for development, testing, and production.
+
+  3. `"db-migrate up test"`: This command runs the database migration scripts in the "test" environment. This is likely to create an isolated database environment for testing purposes.
+
+  4. `"npx tsc"`: This command compiles the TypeScript files into JavaScript files.
+
+  5. `"jasmine"`: This command runs the Jasmine test suite.
+
+  6. `"db-migrate reset"`: This command resets the database migration scripts to their original state. This is likely to clean up any changes made to the database during the testing process.
+
+## EndPoints and tables schemas
+
+I have set up another page called [REQUIREMENTS](./REQUIREMENTS.md) where I explained in details how to reach to the endpoints of the project and the schemas of used tables.
 
 ## Credits
 
