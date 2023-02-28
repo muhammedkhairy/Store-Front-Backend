@@ -89,6 +89,7 @@ CREATE USER admin WITH PASSWORD '1234';
 ALTER USER admin WITH SUPERUSER;
 GRANT ALL PRIVILEGES ON DATABASE store TO admin;
 GRANT ALL PRIVILEGES ON DATABASE store_test TO admin;
+\c store admin;
 ```
 
 10 . After creating the database, you can use it in your application by connecting to it using the credentials in the .env file.

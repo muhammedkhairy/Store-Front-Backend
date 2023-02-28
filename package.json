@@ -11,9 +11,8 @@
     "build": "npx tsc",
     "watch": "rimraf dist && tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node dist/server.js\"",
     "test": "jasmine",
-    "startTests": "rimraf dist && db-migrate up --env test && npx tsc && jasmine && db-migrate reset --env test",
-
-    "startTests:MAC": "rimraf dist && export NODE_ENV=test db-migrate up && npx tsc && jasmine && db-migrate reset",
+    "startTests": "set NODE_ENV=test && rimraf dist && db-migrate up && npx tsc && jasmine && db-migrate reset",
+    "startTests:Mac": "export NODE_ENV=test && rimraf dist && db-migrate up && npx tsc && jasmine && db-migrate reset",
     "migrate:up": "npx db-migrate up",
     "migrate:down": "npx db-migrate down",
     "migrate:downAll": "npx db-migrate reset",
