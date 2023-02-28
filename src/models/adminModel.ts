@@ -12,7 +12,7 @@ export const createAdmin = async (admin: Admin): Promise<void> => {
   try {
     await conn.query('BEGIN');
 
-    // Check if an admin with the same email address already exists
+    // Check if an admin in the admin tables
     const checkSql = `SELECT id FROM admins`;
     const checkResult = await conn.query(checkSql);
     if (checkResult.rowCount > 0) {

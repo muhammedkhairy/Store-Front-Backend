@@ -7,7 +7,7 @@ import { customError } from '../middleware/errorHandler';
 
 dotenv.config();
 
-const pepper = process.env.BCRYPT_PASSWORD;
+const pepper = process.env.BCRYPT_PASSWORD || '';
 const secret = process.env.JWT_SECRET;
 
 const authAdminHelper = async (email: string, password: string): Promise<Admin> => {
@@ -28,7 +28,7 @@ const authAdminHelper = async (email: string, password: string): Promise<Admin> 
     const passwordsMatch = bcrypt.compareSync(password + pepper, admin.password);
 
     if (!passwordsMatch) {
-      const error: customError = new Error(`Invalid password for admin with email ${email}`);
+      const error: customError = new Error(`Invalid password`);
       error.statusCode = 401;
       error.errorCode = 'INVALID_PASSWORD';
       throw error;
@@ -38,7 +38,7 @@ const authAdminHelper = async (email: string, password: string): Promise<Admin> 
     return admin;
   } catch (error) {
     const customErr = error as customError;
-    customErr.message = `Something went wrong with login credentials: ${customErr.message}`;
+    customErr.message = `Something went wrong with login credentials`;
     customErr.statusCode = customErr.statusCode || 500;
     customErr.errorCode = customErr.errorCode || 'SERVER_ERROR';
     throw customErr;
