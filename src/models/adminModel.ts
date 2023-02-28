@@ -16,7 +16,7 @@ export const createAdmin = async (admin: Admin): Promise<void> => {
     const checkSql = `SELECT id FROM admins`;
     const checkResult = await conn.query(checkSql);
     if (checkResult.rowCount > 0) {
-      throw new Error('An admin user already exists');
+      throw new Error('An admin user is already exists');
     }
 
     const sql = `INSERT INTO admins (email, password) VALUES ($1, $2) RETURNING *;`;
@@ -30,7 +30,6 @@ export const createAdmin = async (admin: Admin): Promise<void> => {
   } catch (error) {
     await conn.query('ROLLBACK');
     conn.release();
-    throw new Error(`Error adding admin: ${admin.email} - ${error}`);
+    throw new Error(`Error adding admin, ${error}`);
   }
 };
-
