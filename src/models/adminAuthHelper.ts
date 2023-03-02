@@ -18,7 +18,7 @@ const authAdminHelper = async (email: string, password: string): Promise<Admin> 
     const result = await conn.query(sql, values);
 
     if (result.rowCount === 0) {
-      const error: customError = new Error(`Admin with email ${email} not found`);
+      const error: customError = new Error(`Admin with email: ${email} not found`);
       error.statusCode = 404;
       error.errorCode = 'ADMIN_NOT_FOUND';
       throw error;
@@ -38,7 +38,6 @@ const authAdminHelper = async (email: string, password: string): Promise<Admin> 
     return admin;
   } catch (error) {
     const customErr = error as customError;
-    customErr.message = `Something went wrong with login credentials`;
     customErr.statusCode = customErr.statusCode || 500;
     customErr.errorCode = customErr.errorCode || 'SERVER_ERROR';
     throw customErr;

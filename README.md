@@ -202,7 +202,7 @@ As required in project to protect users endpoints: create, show all users, show 
 ### Compiling code and run tests
 
 - `yarn startTests` will tiger the command `rimraf dist && npx tsc && jasmine` which will delete dist folder then compile the TypeScript code into newly created test folder then run unit tests on the files.
-- This script is modified by a way to run database tests on a test database to not touch the original database.`"startTests": "rimraf dist && set NODE_ENV=test && db-migrate up test && npx tsc && jasmine && db-migrate reset"`
+- This script is modified by a way to run database tests on a test database to not touch the original database.`"startTests": "rimraf dist && set NODE_ENV=test&& db-migrate up test && npx tsc && jasmine && db-migrate reset"`
 
   1. `"rimraf dist"`: This command deletes the "dist" directory, where the compiled TypeScript files are stored.
 
