@@ -28,10 +28,10 @@ const getOrdersByProduct = async (req: Request, res: Response, next: NextFunctio
 // Add a new order
 const addOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { userId, productId, quantity, status }: Order = req.body;
+    const { user_id, product_id, quantity, status }: Order = req.body;
 
     // Validate userId and productId
-    if (!userId || !productId) {
+    if (!user_id || !product_id) {
       const error: customError = new Error(`User ID and Product ID are required`);
       error.statusCode = 400;
       error.errorCode = 'BAD_REQUEST';
@@ -47,8 +47,8 @@ const addOrder = async (req: Request, res: Response, next: NextFunction): Promis
     }
 
     const newOrder: Order = {
-      userId,
-      productId,
+      user_id,
+      product_id,
       quantity,
       status,
     };
@@ -65,16 +65,15 @@ const updateOrder = async (req: Request, res: Response, next: NextFunction): Pro
   try {
     const id = req.params.id;
     const order: Order = req.body;
-    const updatedOrder = await ordersModel.updateOrder (id, order);
+    const updatedOrder = await ordersModel.updateOrder(id, order);
     res.status(200).json({
       updatedOrder,
-      message: 'Order updated successfully.'
+      message: 'Order updated successfully.',
     });
   } catch (error) {
     next(error);
-  };
+  }
 };
-
 
 // Delete an existing order
 const deleteOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -86,7 +85,6 @@ const deleteOrder = async (req: Request, res: Response, next: NextFunction): Pro
     next(error);
   }
 };
-
 
 export default {
   getOrdersByUser,

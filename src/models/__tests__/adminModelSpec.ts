@@ -14,12 +14,6 @@ describe('Admin creation Model', () => {
     conn.release();
   });
 
-  afterAll(async () => {
-    const conn = await client.connect();
-    await conn.query('TRUNCATE admins');
-    conn.release();
-  });
-
   afterEach(async () => {
     const conn = await client.connect();
     await conn.query('TRUNCATE admins');

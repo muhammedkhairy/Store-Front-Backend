@@ -25,7 +25,7 @@ export class productModel {
   }
 
   // get all products from database
-  static async getALlproducts(): Promise<Product[]> {
+  static async getAllProducts(): Promise<Product[]> {
     const conn = await client.connect();
     try {
       const sql = `SELECT id, name, price, category FROM products;`;

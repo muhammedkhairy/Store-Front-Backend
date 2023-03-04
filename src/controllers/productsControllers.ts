@@ -24,7 +24,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
 // Display all products in database
 const index = async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await productModel.getALlproducts();
+    const users = await productModel.getAllProducts();
     res.status(200).json(users);
   } catch (error) {
     next(error);

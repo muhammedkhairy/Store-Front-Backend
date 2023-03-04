@@ -71,7 +71,6 @@ export class userModel {
       return result.rows[0];
     } catch (error) {
       const customErr = error as customError;
-      customErr.message = `Problem with getting user: ${customErr.message}`;
       customErr.statusCode = customErr.statusCode || 500;
       customErr.errorCode = customErr.errorCode || 'SERVER_ERROR';
       throw customErr;

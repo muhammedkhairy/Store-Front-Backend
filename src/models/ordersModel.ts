@@ -4,8 +4,8 @@ import validateUUID from '../utils/validateUUID';
 
 export interface Order {
   id?: string;
-  userId: string;
-  productId: string;
+  user_id: string;
+  product_id: string;
   quantity: number;
   status: string;
 }
@@ -17,7 +17,7 @@ export class ordersModel {
       const conn = await client.connect();
 
       const sql = `INSERT INTO Orders (id, user_id, order_id, quantity, status) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
-      const values = [order.id, order.userId, order.productId, order.quantity, order.status];
+      const values = [order.id, order.user_id, order.product_id, order.quantity, order.status];
       const result = await client.query(sql, values);
 
       conn.release();
@@ -71,7 +71,7 @@ export class ordersModel {
 
       validateUUID(id);
       const sql = `UPDATE Orders SET user_id=$1, order_id=$2, quantity=$3, status=$4 WHERE id=$5 RETURNING *;`;
-      const values = [order.userId, order.productId, order.quantity, order.status, id];
+      const values = [order.user_id, order.product_id, order.quantity, order.status, id];
       const result = await client.query(sql, values);
 
       if (result.rows.length === 0) {
